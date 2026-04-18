@@ -266,7 +266,7 @@ $expense_today = $data_expense_today['expense_today'] ?? 0;
         <!-- Header Section -->
         <div class="mb-10">
             <h2 class="text-3xl font-bold tracking-tight text-on-surface mb-1">
-                Portfolio Intelligence
+                Financial Overview
             </h2>
             <p class="text-on-surface-variant font-body">
                 Welcome back, <?php echo $_SESSION['user_name']; ?>.
