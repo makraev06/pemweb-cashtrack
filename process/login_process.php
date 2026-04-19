@@ -7,7 +7,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    // ambil user dari database
     $stmt = mysqli_prepare($conn, "SELECT id, name, email, password FROM users WHERE email = ?");
     mysqli_stmt_bind_param($stmt, "s", $email);
     mysqli_stmt_execute($stmt);
@@ -18,9 +17,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($user && $password === $user['password']) {
 
         $_SESSION['user_id'] = $user['id'];
-        $_SESSION['user_name'] = $user['name'];
+        $_SESSION['name'] = $user['name'];
+        $_SESSION['show_splash'] = true;
 
-        header("Location: ../dashboard.php");
+        header("Location: ../index.php");
         exit;
 
     } else {

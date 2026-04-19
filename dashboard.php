@@ -48,220 +48,20 @@ $data_expense_today = mysqli_fetch_assoc($query_expense_today);
 $expense_today = $data_expense_today['expense_today'] ?? 0;
 ?>
 
-<!doctype html>
+<?php
+$pageTitle = 'The Sovereign Ledger - Dashboard';
+$activePage = 'dashboard';
+$searchPlaceholder = 'Search ledger assets...';
 
+?>
+<!DOCTYPE html>
 <html class="light" lang="en">
-
-<head>
-    <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>The Sovereign Ledger - Dashboard</title>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap"
-        rel="stylesheet" />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-        rel="stylesheet" />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-        rel="stylesheet" />
-    <script id="tailwind-config">
-    tailwind.config = {
-        darkMode: "class",
-        theme: {
-            extend: {
-                colors: {
-                    "on-secondary-container": "#456a56",
-                    "on-error": "#ffffff",
-                    "on-primary-fixed-variant": "#005235",
-                    "surface-container-high": "#e6e8eb",
-                    "on-surface-variant": "#3e4942",
-                    "primary-container": "#00875a",
-                    secondary: "#416652",
-                    "secondary-container": "#c0e9cf",
-                    "surface-container-lowest": "#ffffff",
-                    "primary-fixed-dim": "#71dba6",
-                    "surface-bright": "#f7f9fc",
-                    "on-error-container": "#93000a",
-                    "on-tertiary-fixed-variant": "#7d2a2a",
-                    "inverse-surface": "#2d3133",
-                    "on-primary": "#ffffff",
-                    "surface-dim": "#d8dadd",
-                    "on-primary-fixed": "#002113",
-                    "on-tertiary-container": "#ffffff",
-                    outline: "#6e7a71",
-                    "on-tertiary": "#ffffff",
-                    tertiary: "#9b403e",
-                    "inverse-on-surface": "#eff1f4",
-                    "on-background": "#191c1e",
-                    "on-secondary-fixed": "#002113",
-                    "surface-tint": "#006c47",
-                    "surface-variant": "#e0e3e6",
-                    "on-secondary": "#ffffff",
-                    primary: "#006b47",
-                    "surface-container": "#eceef1",
-                    "surface-container-highest": "#e0e3e6",
-                    "on-secondary-fixed-variant": "#294e3b",
-                    error: "#ba1a1a",
-                    "tertiary-fixed": "#ffdad7",
-                    surface: "#f7f9fc",
-                    background: "#f7f9fc",
-                    "outline-variant": "#bdcac0",
-                    "surface-container-low": "#f2f4f7",
-                    "on-tertiary-fixed": "#410005",
-                    "on-primary-container": "#ffffff",
-                    "error-container": "#ffdad6",
-                    "secondary-fixed-dim": "#a7d0b7",
-                    "on-surface": "#191c1e",
-                    "tertiary-container": "#ba5855",
-                    "primary-fixed": "#8df7c1",
-                    "secondary-fixed": "#c2ecd2",
-                    "inverse-primary": "#71dba6",
-                    "tertiary-fixed-dim": "#ffb3af",
-                },
-                borderRadius: {
-                    DEFAULT: "0.125rem",
-                    lg: "0.25rem",
-                    xl: "0.5rem",
-                    full: "0.75rem",
-                },
-                fontFamily: {
-                    headline: ["Manrope"],
-                    body: ["Inter"],
-                    label: ["Inter"],
-                },
-            },
-        },
-    };
-    </script>
-    <style>
-    body {
-        font-family: "Inter", sans-serif;
-    }
-
-    h1,
-    h2,
-    h3,
-    .display-font {
-        font-family: "Manrope", sans-serif;
-    }
-
-    .material-symbols-outlined {
-        font-variation-settings:
-            "FILL"0,
-            "wght"400,
-            "GRAD"0,
-            "opsz"24;
-    }
-
-    .chart-gradient-primary {
-        background: linear-gradient(180deg,
-                rgba(0, 107, 71, 0.1) 0%,
-                rgba(0, 107, 71, 0) 100%);
-    }
-
-    .chart-gradient-tertiary {
-        background: linear-gradient(180deg,
-                rgba(155, 64, 62, 0.1) 0%,
-                rgba(155, 64, 62, 0) 100%);
-    }
-    </style>
-</head>
+<?php include 'includes/head.php'; ?>
 
 <body class="bg-surface text-on-surface">
-    <!-- SideNavBar Shell -->
-    <aside
-        class="fixed left-0 top-0 h-full flex flex-col p-4 bg-slate-50 dark:bg-slate-900 h-screen w-64 border-r-0 shadow-[12px_0px_32px_rgba(25,28,30,0.04)] z-50">
-        <div class="flex items-center gap-3 mb-10 px-2">
-            <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white">
-                <span class="material-symbols-outlined"
-                    style="font-variation-settings: &quot;FILL&quot; 1">account_balance</span>
-            </div>
-            <div>
-                <h1 class="text-xl font-bold text-emerald-800 dark:text-emerald-100 font-['Manrope'] tracking-tight">
-                    Sovereign Ledger
-                </h1>
-                <p class="text-[10px] uppercase font-bold tracking-widest text-slate-400">
-                    Institutional Grade
-                </p>
-            </div>
-        </div>
-        <nav class="flex-1 space-y-2">
+    <?php include 'includes/sidebar.php'; ?>
+    <?php include 'includes/topbar.php'; ?>
 
-            <!-- Active: Dashboard -->
-            <a class="flex items-center gap-3 p-3 text-emerald-700 dark:text-emerald-400 font-bold bg-white dark:bg-slate-800 shadow-sm rounded-lg translate-x-1 transition-transform font-['Manrope'] tracking-tight"
-                href="dashboard.php">
-                <span class="material-symbols-outlined">dashboard</span>
-                <span>Dashboard</span>
-            </a>
-            <a class="flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 hover:text-emerald-600 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-colors font-['Manrope'] tracking-tight"
-                href="transaction.php">
-                <span class="material-symbols-outlined">account_balance_wallet</span>
-                <span>Transactions</span>
-            </a>
-            <a class="flex items-center gap-3 p-3 text-slate-500 dark:text-slate-400 hover:text-emerald-600 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-colors font-['Manrope'] tracking-tight"
-                href="assets.php">
-                <span class="material-symbols-outlined">account_balance</span>
-                <span>Assets</span>
-            </a>
-        </nav>
-        <div class="mt-auto pt-6 border-t border-slate-100">
-            <div class="flex items-center gap-3 px-2">
-                <img alt="Organization Logo" class="w-10 h-10 rounded-full object-cover grayscale"
-                    data-alt="professional headshot of a mature executive in a dark suit against a neutral studio background"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuCu0NCMN8yamo0pOdJ3ycPw7aBYRdVVQ8TooPFlrpkx--bmi0NIqc5_u4_5bgY8hjhFIPXhWfdpTNBjvnWjteQ4C_bP38khNiucVa2a2hW8FR6_zMUxGbaVnKyJQHr_EsE9kRLXauyyo3SB0byRojJhQlA8XEZ_PA-eai1gecjDH3h3PUE2kzka_1n84cwlVQd8LJfbStejlKoDdkzu3x3AXjZkwIYESkbc-06pjv3LSjeB6E9e8m9uaszgr2RSci8wGY9vfkJzvF1q" />
-                <div class="overflow-hidden">
-                    <p class="text-sm font-semibold truncate text-on-surface">
-                        <?php echo $_SESSION['user_name']; ?>
-                    </p>
-                    <p class="text-xs text-slate-400 truncate">Senior Comptroller</p>
-                </div>
-            </div>
-        </div>
-    </aside>
-    <!-- TopNavBar Shell -->
-    <header
-        class="sticky top-0 z-40 flex justify-between items-center px-8 h-16 ml-64 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md border-b border-slate-100 dark:border-slate-800">
-        <div class="flex items-center flex-1 max-w-xl">
-            <div class="relative w-full focus-within:ring-2 focus-within:ring-emerald-500/20 rounded-lg">
-                <span class="absolute inset-y-0 left-3 flex items-center text-slate-400">
-                    <span class="material-symbols-outlined text-[20px]">search</span>
-                </span>
-                <input
-                    class="w-full bg-surface-container-low border-none rounded-lg pl-10 py-2 text-sm focus:ring-0 placeholder:text-slate-400"
-                    placeholder="Search ledger assets..." type="text" />
-            </div>
-        </div>
-        <div class="flex items-center gap-4 ml-6">
-            <button class="p-2 text-slate-500 hover:text-emerald-500 transition-colors relative">
-                <span class="material-symbols-outlined">notifications</span>
-                <span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full border-2 border-white"></span>
-            </button>
-            <div class="relative group">
-                <button class="p-2 text-slate-500 hover:text-emerald-500 transition-colors">
-                    <span class="material-symbols-outlined">settings</span>
-                </button>
-
-                <!-- DROPDOWN -->
-                <div
-                    class="absolute right-0 mt-3 w-44 bg-white border border-slate-200 rounded-xl shadow-lg opacity-0 invisible translate-y-2 scale-95 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:scale-100transition-all duration-200 origin-top-right">
-                    <a href="#" class="block px-4 py-2 text-sm text-slate-600 hover:bg-slate-100">
-                        Profile
-                    </a>
-
-                    <div class="border-t border-slate-200 my-1"></div>
-
-                    <a href="process/logout.php"
-                        class="block px-4 py-2 text-sm text-red-500 hover:bg-red-50 hover:text-red-600">
-                        Logout
-                    </a>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Content Canvas -->
     <main class="ml-64 p-8 min-h-screen">
         <!-- Header Section -->
         <div class="mb-10">
@@ -269,7 +69,7 @@ $expense_today = $data_expense_today['expense_today'] ?? 0;
                 Financial Overview
             </h2>
             <p class="text-on-surface-variant font-body">
-                Welcome back, <?php echo $_SESSION['user_name']; ?>.
+                Welcome back, <?php echo $_SESSION['name']; ?>.
             </p>
         </div>
         <!-- KPI Cards Grid -->
@@ -478,6 +278,7 @@ $expense_today = $data_expense_today['expense_today'] ?? 0;
             </div>
         </div>
     </main>
+
     <!-- Footer Shell -->
     <footer
         class="ml-64 p-6 flex justify-between items-center bg-slate-50 dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800">
