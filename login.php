@@ -186,25 +186,7 @@
             </button>
         </form>
 
-        <!-- Social Login / Alternative -->
-        <div class="mt-8 relative flex items-center justify-center">
-            <div class="absolute inset-0 flex items-center">
-                <div class="w-full border-t border-outline-variant/20"></div>
-            </div>
-            <span class="relative px-4 bg-white/0 font-label text-label-sm text-outline">OR AUTHORIZE WITH</span>
-        </div>
-        <div class="mt-6 flex gap-4">
-            <button
-                class="flex-1 py-2.5 flex items-center justify-center gap-2 bg-surface-container-high rounded-lg hover:bg-surface-dim hover:shadow-md transition-all duration-200 active:scale-[0.98]">
-                <span class="material-symbols-outlined text-lg" data-icon="key">key</span>
-                <span class="text-sm font-medium">SSO</span>
-            </button>
-            <button
-                class="flex-1 py-2.5 flex items-center justify-center gap-2 bg-surface-container-high rounded-lg hover:bg-surface-dim hover:shadow-md transition-all duration-200 active:scale-[0.98]">
-                <span class="material-symbols-outlined text-lg" data-icon="fingerprint">fingerprint</span>
-                <span class="text-sm font-medium">Biometric</span>
-            </button>
-        </div>
+
         <!-- Footer Links -->
         <p class="text-center mt-8 text-on-surface-variant text-sm">
             New to the ledger?

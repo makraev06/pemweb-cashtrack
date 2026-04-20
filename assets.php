@@ -147,13 +147,13 @@ $topbarTitle = 'Assets';
 
                 <div class="flex justify-center border-t border-outline-variant/10 bg-slate-50 px-6 py-4">
                     <button type="button" class="text-xs font-bold text-primary hover:underline">
-                        View All Assets (
+                        Lihat Semua Aset (
                         <?php echo $total_item; ?>)
                     </button>
                 </div>
             <?php else: ?>
                 <div class="rounded-xl bg-surface-container-lowest p-10 text-center shadow">
-                    <p class="text-slate-400">Belum ada asset.</p>
+                    <p class="text-slate-400">Belum ada aset.</p>
                 </div>
             <?php endif; ?>
         </section>

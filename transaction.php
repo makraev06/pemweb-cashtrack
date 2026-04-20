@@ -29,9 +29,9 @@ $searchPlaceholder = 'Cari Transaksi...';
         <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
             <div>
                 <nav class="flex items-center gap-2 text-[10px] font-bold text-outline uppercase tracking-widest mb-2">
-                    <span class="hover:text-primary transition-colors cursor-pointer">Ledger</span>
+                    <span class="hover:text-primary transition-colors cursor-pointer">Buku Besar</span>
                     <span class="material-symbols-outlined text-[10px]">chevron_right</span>
-                    <span class="text-primary">Transaction History</span>
+                    <span class="text-primary">Histori Transaksi</span>
                 </nav>
                 <h2 class="text-[2.75rem] font-bold text-on-surface font-['Manrope'] leading-tight tracking-tight">
                     Histori Transaksi</h2>
