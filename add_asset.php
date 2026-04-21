@@ -226,7 +226,7 @@ $topbarTitle = 'Add Asset';
         class="ml-64 p-6 flex justify-between items-center bg-slate-50 dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800">
         <div class="flex items-center gap-4">
             <span class="font-['Inter'] text-xs text-slate-400">
-                © 2024 The CashTrack. All rights reserved.
+                © 2026 The CashTrack. All rights reserved.
             </span>
         </div>
         <div class="flex items-center gap-6">

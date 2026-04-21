@@ -224,7 +224,7 @@ $topbarTitle = 'Assets';
     <footer class="ml-64 border-t border-slate-100 bg-slate-50 p-6 dark:border-slate-800 dark:bg-slate-900">
         <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
             <p class="font-['Inter'] text-xs text-slate-400">
-                © 2024 The CashTrack. All rights reserved.
+                © 2026 The CashTrack. All rights reserved.
             </p>
 
             <div class="flex gap-4">
