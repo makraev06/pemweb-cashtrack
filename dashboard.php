@@ -25,6 +25,7 @@ $total_expense = $data_expense['total_expense'] ?? 0;
 // total balance
 $total_balance = $total_income - $total_expense;
 
+
 // income hari ini
 $query_income_today = mysqli_query($conn, "
     SELECT SUM(jumlah) as income_today 
@@ -46,6 +47,106 @@ $query_expense_today = mysqli_query($conn, "
 ");
 $data_expense_today = mysqli_fetch_assoc($query_expense_today);
 $expense_today = $data_expense_today['expense_today'] ?? 0;
+
+// income bulan ini
+$query_income_month = mysqli_query($conn, "
+    SELECT SUM(jumlah) as income_month
+    FROM transactions
+    WHERE user_id = $user_id
+    AND jenis = 'income'
+    AND MONTH(tanggal) = MONTH(CURDATE())
+    AND YEAR(tanggal) = YEAR(CURDATE())
+");
+$data_income_month = mysqli_fetch_assoc($query_income_month);
+$income_month = $data_income_month['income_month'] ?? 0;
+
+// expense bulan ini
+$query_expense_month = mysqli_query($conn, "
+    SELECT SUM(jumlah) as expense_month
+    FROM transactions
+    WHERE user_id = $user_id
+    AND jenis = 'expense'
+    AND MONTH(tanggal) = MONTH(CURDATE())
+    AND YEAR(tanggal) = YEAR(CURDATE())
+");
+$data_expense_month = mysqli_fetch_assoc($query_expense_month);
+$expense_month = $data_expense_month['expense_month'] ?? 0;
+
+// cash flow bulan ini
+$cashflow_month = $income_month - $expense_month;
+
+// income bulan lalu
+$query_income_last_month = mysqli_query($conn, "
+    SELECT SUM(jumlah) as income_last_month
+    FROM transactions
+    WHERE user_id = $user_id
+    AND jenis = 'income'
+    AND MONTH(tanggal) = MONTH(DATE_SUB(CURDATE(), INTERVAL 1 MONTH))
+    AND YEAR(tanggal) = YEAR(DATE_SUB(CURDATE(), INTERVAL 1 MONTH))
+");
+$data_income_last_month = mysqli_fetch_assoc($query_income_last_month);
+$income_last_month = $data_income_last_month['income_last_month'] ?? 0;
+
+// expense bulan lalu
+$query_expense_last_month = mysqli_query($conn, "
+    SELECT SUM(jumlah) as expense_last_month
+    FROM transactions
+    WHERE user_id = $user_id
+    AND jenis = 'expense'
+    AND MONTH(tanggal) = MONTH(DATE_SUB(CURDATE(), INTERVAL 1 MONTH))
+    AND YEAR(tanggal) = YEAR(DATE_SUB(CURDATE(), INTERVAL 1 MONTH))
+");
+$data_expense_last_month = mysqli_fetch_assoc($query_expense_last_month);
+$expense_last_month = $data_expense_last_month['expense_last_month'] ?? 0;
+
+// persentase income vs bulan lalu
+if ($income_last_month > 0) {
+    $income_change = (($income_month - $income_last_month) / $income_last_month) * 100;
+} else {
+    $income_change = $income_month > 0 ? 100 : 0;
+}
+
+// persentase expense vs bulan lalu
+if ($expense_last_month > 0) {
+    $expense_change = (($expense_month - $expense_last_month) / $expense_last_month) * 100;
+} else {
+    $expense_change = $expense_month > 0 ? 100 : 0;
+}
+
+// total aset
+$query_total_assets = mysqli_query($conn, "
+    SELECT SUM(nilai) as total_assets
+    FROM assets
+    WHERE user_id = $user_id
+");
+$data_total_assets = mysqli_fetch_assoc($query_total_assets);
+$total_assets = $data_total_assets['total_assets'] ?? 0;
+
+// ambil data income & expense per bulan (12 bulan terakhir)
+$query_chart = mysqli_query($conn, "
+    SELECT 
+        MONTH(tanggal) as bulan,
+        YEAR(tanggal) as tahun,
+        SUM(CASE WHEN jenis = 'income' THEN jumlah ELSE 0 END) as total_income,
+        SUM(CASE WHEN jenis = 'expense' THEN jumlah ELSE 0 END) as total_expense
+    FROM transactions
+    WHERE user_id = $user_id
+    AND tanggal >= DATE_SUB(CURDATE(), INTERVAL 12 MONTH)
+    GROUP BY tahun, bulan
+    ORDER BY tahun ASC, bulan ASC
+");
+
+// siapkan array untuk chart
+$labels = [];
+$data_income = [];
+$data_expense = [];
+
+while ($row = mysqli_fetch_assoc($query_chart)) {
+    $labels[] = date('M', mktime(0, 0, 0, $row['bulan'], 1)); // Jan, Feb, dst
+    $data_income[] = $row['total_income'];
+    $data_expense[] = $row['total_expense'];
+}
+
 ?>
 
 <?php
@@ -72,69 +173,114 @@ $searchPlaceholder = 'Cari Buku Besar Aset...';
             </p>
         </div>
         <!-- KPI Cards Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-10">
             <!-- Total Balance -->
             <div
-                class="bg-surface-container-lowest rounded-xl p-6 shadow-[0px_4px_20px_rgba(0,0,0,0.02)] transition-all hover:shadow-md">
-                <div class="flex justify-between items-start mb-4">
-                    <span class="text-label-sm font-bold text-slate-400 uppercase tracking-widest text-[10px]">Total
-                        Saldo</span>
-                    <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
-                        <span class="material-symbols-outlined">payments</span>
+                class="bg-surface-container-lowest rounded-[24px] p-6 border border-outline-variant/20 shadow-[0px_4px_20px_rgba(0,0,0,0.02)] transition-all hover:shadow-md">
+                <div class="flex justify-between items-start mb-5">
+                    <div>
+                        <span class="text-slate-400 uppercase tracking-widest text-[10px] font-bold">Overview</span>
+                        <h4 class="text-base font-bold text-on-surface mt-2">Total Balance</h4>
                     </div>
-                </div>
-                <div class="flex items-baseline gap-2">
-                    <span class="text-slate-400 text-xl">Rp</span>
-                    <h3 class="text-4xl font-bold font-headline tracking-tighter">
-                        <?php echo number_format($total_balance, 0, ',', '.'); ?>
-                    </h3>
-                </div>
-                <div class="mt-4 flex items-center text-primary text-xs font-bold">
-                    <span class="material-symbols-outlined text-[14px] mr-1">trending_up</span>
-                    <span>+2.4% dari minggu lalu</span>
-                </div>
-            </div>
-            <!-- Total Income -->
-            <div
-                class="bg-surface-container-lowest rounded-xl p-6 shadow-[0px_4px_20px_rgba(0,0,0,0.02)] transition-all hover:shadow-md">
-                <div class="flex justify-between items-start mb-4">
-                    <span class="text-label-sm font-bold text-slate-400 uppercase tracking-widest text-[10px]">Total
-                        Pemasukan Hari Ini</span>
                     <div
-                        class="w-10 h-10 rounded-lg bg-primary-container/10 flex items-center justify-center text-primary-container">
-                        <span class="material-symbols-outlined">arrow_downward</span>
+                        class="w-11 h-11 rounded-full border border-outline-variant/30 flex items-center justify-center text-on-surface">
+                        <span class="material-symbols-outlined text-[20px]">account_balance_wallet</span>
                     </div>
                 </div>
-                <div class="flex items-baseline gap-2">
-                    <span class="text-slate-400 text-xl">Rp</span>
-                    <h3 class="text-4xl font-bold font-headline tracking-tighter">
-                        <?php echo number_format($income_today, 0, ',', '.'); ?>
-                    </h3>
+
+                <div class="flex items-baseline gap-1">
+                    <span class="text-4xl font-bold font-headline tracking-tight">
+                        Rp<?php echo number_format($total_balance, 0, ',', '.'); ?>
+                    </span>
                 </div>
-                <div
-                    class="mt-4 inline-flex items-center px-2 py-1 bg-primary/10 text-primary rounded-md text-[10px] font-bold uppercase tracking-tight">
-                    Alur Optimal
+
+                <div class="mt-5">
+                    <span class="text-xs text-slate-400 font-medium">Saldo bersih dari seluruh transaksi</span>
                 </div>
             </div>
-            <!-- Total Expense -->
+
+            <!-- Income Bulan Ini -->
             <div
-                class="bg-surface-container-lowest rounded-xl p-6 shadow-[0px_4px_20px_rgba(0,0,0,0.02)] transition-all hover:shadow-md">
-                <div class="flex justify-between items-start mb-4">
-                    <span class="text-label-sm font-bold text-slate-400 uppercase tracking-widest text-[10px]">Total
-                        Pengeluaran Hari Ini</span>
-                    <div class="w-10 h-10 rounded-lg bg-tertiary/10 flex items-center justify-center text-tertiary">
-                        <span class="material-symbols-outlined">arrow_upward</span>
+                class="bg-green-50 rounded-[24px] p-6 border border-green-200 shadow-[0px_4px_20px_rgba(0,0,0,0.02)] transition-all hover:shadow-md">
+                <div class="flex justify-between items-start mb-5">
+                    <div>
+                        <span class="text-green-600 uppercase tracking-widest text-[10px] font-bold">Bulan Ini</span>
+                        <h4 class="text-base font-bold text-on-surface mt-2">Income</h4>
+                    </div>
+                    <div
+                        class="w-11 h-11 rounded-full border border-outline-variant/30 flex items-center justify-center text-on-surface">
+                        <span class="material-symbols-outlined text-[20px]">south_west</span>
                     </div>
                 </div>
-                <div class="flex items-baseline gap-2">
-                    <span class="text-slate-400 text-xl">Rp</span>
-                    <h3 class="text-4xl font-bold font-headline tracking-tighter">
-                        <?php echo number_format($expense_today, 0, ',', '.'); ?>
-                    </h3>
+
+                <div class="flex items-baseline gap-1">
+                    <span class="text-4xl font-bold font-headline tracking-tight">
+                        Rp<?php echo number_format($income_month, 0, ',', '.'); ?>
+                    </span>
                 </div>
-                <div
-                    class="mt-4 inline-flex items-center px-2 py-1 bg-tertiary/10 text-tertiary rounded-md text-[10px] font-bold uppercase tracking-tight">
-                    Arus Keluar Kritis
+
+                <div class="mt-5 flex items-center gap-2">
+                    <span
+                        class="inline-flex items-center px-2 py-1 rounded-full text-[11px] font-bold <?php echo $income_change >= 0 ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'; ?>">
+                        <?php echo $income_change >= 0 ? '↑' : '↓'; ?>
+                        <?php echo number_format(abs($income_change), 1); ?>%
+                    </span>
+                    <span class="text-xs text-slate-400 font-medium">vs last month</span>
+                </div>
+            </div>
+
+            <!-- Expense Bulan Ini -->
+            <div
+                class="bg-red-50 rounded-[24px] p-6 border border-red-200 shadow-[0px_4px_20px_rgba(0,0,0,0.02)] transition-all hover:shadow-md">
+                <div class="flex justify-between items-start mb-5">
+                    <div>
+                        <span class="text-red-600 uppercase tracking-widest text-[10px] font-bold">Bulan Ini</span>
+                        <h4 class="text-base font-bold text-on-surface mt-2">Expense</h4>
+                    </div>
+                    <div
+                        class="w-11 h-11 rounded-full border border-outline-variant/30 flex items-center justify-center text-on-surface">
+                        <span class="material-symbols-outlined text-[20px]">north_east</span>
+                    </div>
+                </div>
+
+                <div class="flex items-baseline gap-1">
+                    <span class="text-4xl font-bold font-headline tracking-tight">
+                        Rp<?php echo number_format($expense_month, 0, ',', '.'); ?>
+                    </span>
+                </div>
+
+                <div class="mt-5 flex items-center gap-2">
+                    <span
+                        class="inline-flex items-center px-2 py-1 rounded-full text-[11px] font-bold <?php echo $expense_change <= 0 ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'; ?>">
+                        <?php echo $expense_change <= 0 ? '↓' : '↑'; ?>
+                        <?php echo number_format(abs($expense_change), 1); ?>%
+                    </span>
+                    <span class="text-xs text-slate-400 font-medium">vs last month</span>
+                </div>
+            </div>
+
+            <!-- Total Assets -->
+            <div
+                class="bg-surface-container-lowest rounded-[24px] p-6 border border-outline-variant/20 shadow-[0px_4px_20px_rgba(0,0,0,0.02)] transition-all hover:shadow-md">
+                <div class="flex justify-between items-start mb-5">
+                    <div>
+                        <span class="text-secondary uppercase tracking-widest text-[10px] font-bold">Portfolio</span>
+                        <h4 class="text-base font-bold text-on-surface mt-2">Total Assets</h4>
+                    </div>
+                    <div
+                        class="w-11 h-11 rounded-full border border-outline-variant/30 flex items-center justify-center text-on-surface">
+                        <span class="material-symbols-outlined text-[20px]">savings</span>
+                    </div>
+                </div>
+
+                <div class="flex items-baseline gap-1">
+                    <span class="text-4xl font-bold font-headline tracking-tight">
+                        Rp<?php echo number_format($total_assets, 0, ',', '.'); ?>
+                    </span>
+                </div>
+
+                <div class="mt-5">
+                    <span class="text-xs text-slate-400 font-medium">Total nilai aset yang tercatat</span>
                 </div>
             </div>
         </div>
@@ -166,31 +312,7 @@ $searchPlaceholder = 'Cari Buku Besar Aset...';
                 <!-- Fake Area Chart Visual -->
                 <div
                     class="relative w-full h-[320px] bg-surface-container-low/30 rounded-lg overflow-hidden border border-outline-variant/10">
-                    <svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 800 300">
-                        <!-- Income Path -->
-                        <path class="fill-primary/5"
-                            d="M0,250 Q100,200 200,220 T400,150 T600,100 T800,80 L800,300 L0,300 Z"></path>
-                        <path class="text-primary" d="M0,250 Q100,200 200,220 T400,150 T600,100 T800,80" fill="none"
-                            stroke="currentColor" stroke-width="3"></path>
-                        <!-- Expense Path -->
-                        <path class="fill-tertiary/5"
-                            d="M0,280 Q150,260 300,270 T450,220 T600,240 T800,200 L800,300 L0,300 Z"></path>
-                        <path class="text-tertiary" d="M0,280 Q150,260 300,270 T450,220 T600,240 T800,200" fill="none"
-                            stroke="currentColor" stroke-width="3"></path>
-                        <!-- Grid Lines -->
-                        <line class="text-slate-100" stroke="currentColor" stroke-dasharray="4" x1="0" x2="800" y1="100"
-                            y2="100"></line>
-                        <line class="text-slate-100" stroke="currentColor" stroke-dasharray="4" x1="0" x2="800" y1="200"
-                            y2="200"></line>
-                    </svg>
-                    <!-- Data Points Labels -->
-                    <div
-                        class="absolute bottom-4 left-0 w-full flex justify-between px-8 text-[10px] font-bold text-slate-400 tracking-widest uppercase">
-                        <span>Week 01</span>
-                        <span>Week 02</span>
-                        <span>Week 03</span>
-                        <span>Week 04</span>
-                    </div>
+                    <canvas id="financeChart" height="100"></canvas>
                 </div>
             </div>
             <!-- Side Widgets -->
@@ -269,7 +391,7 @@ $searchPlaceholder = 'Cari Buku Besar Aset...';
                             <span class="text-sm font-bold text-primary">Rp450,000</span>
                         </div>
                         <button
-                            class="w-full mt-2 py-3 bg-primary/5 text-primary rounded-lg text-xs font-bold hover:bg-primary/10 transition-colors">
+                            class="w-full mt-2 py-3 bg-secondary/5 text-primary rounded-lg text-xs font-bold hover:bg-primary/10 transition-colors">
                             LIHAT KALENDER LENGKAP
                         </button>
                     </div>
@@ -290,6 +412,49 @@ $searchPlaceholder = 'Cari Buku Besar Aset...';
             <span class="hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer">Terms</span>
         </div>
     </footer>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+    const ctx = document.getElementById('financeChart').getContext('2d');
+
+    const financeChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: <?php echo json_encode($labels); ?>,
+            datasets: [{
+                    label: 'Income',
+                    data: <?php echo json_encode($data_income); ?>,
+                    borderColor: '#16a34a',
+                    backgroundColor: 'rgba(22,163,74,0.1)',
+                    tension: 0.4,
+                    fill: true
+                },
+                {
+                    label: 'Expense',
+                    data: <?php echo json_encode($data_expense); ?>,
+                    borderColor: '#dc2626',
+                    backgroundColor: 'rgba(220,38,38,0.1)',
+                    tension: 0.4,
+                    fill: true
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: true
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+    </script>
+
 </body>
 
 </html>
