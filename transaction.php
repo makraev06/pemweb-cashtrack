@@ -241,7 +241,7 @@ $searchPlaceholder = 'Cari Transaksi...';
     <footer
         class="ml-64 p-6 flex justify-between items-center bg-slate-50 dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800">
         <div class="flex items-center gap-6">
-            <span class="font-['Inter'] text-xs text-slate-400">© 2024 The CashTrack. All rights reserved.</span>
+            <span class="font-['Inter'] text-xs text-slate-400">© 2026 The CashTrack. All rights reserved.</span>
             <div class="flex items-center gap-4">
                 <a class="font-['Inter'] text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
                     href="#">Privacy Policy</a>

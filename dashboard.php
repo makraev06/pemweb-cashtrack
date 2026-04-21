@@ -282,7 +282,7 @@ $searchPlaceholder = 'Cari Buku Besar Aset...';
     <footer
         class="ml-64 p-6 flex justify-between items-center bg-slate-50 dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800">
         <div class="flex gap-6">
-            <span class="font-['Inter'] text-xs text-slate-400">© 2024 CashTrack. All rights reserved.</span>
+            <span class="font-['Inter'] text-xs text-slate-400">© 2026 CashTrack. All rights reserved.</span>
         </div>
         <div class="flex gap-6 font-['Inter'] text-xs text-slate-400">
             <span class="hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer">Version 2.4.1</span>

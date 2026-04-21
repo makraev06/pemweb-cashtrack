@@ -1,5 +1,5 @@
 <?php
-$pageTitle = $pageTitle ?? 'The Sovereign Ledger';
+$pageTitle = $pageTitle ?? 'Dashboard CashTrack';
 ?>
 
 <head>
