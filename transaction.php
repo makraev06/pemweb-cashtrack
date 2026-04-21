@@ -4,11 +4,28 @@ include 'config/database.php';
 
 $user_id = $_SESSION['user_id'];
 
-$query = mysqli_query($conn, "
-    SELECT * FROM transactions
-    WHERE user_id = $user_id
-    ORDER BY tanggal DESC, id DESC
-");
+$filter_jenis = $_GET['jenis'] ?? '';
+$filter_start = $_GET['start_date'] ?? '';
+$filter_end = $_GET['end_date'] ?? '';
+
+$sql = "SELECT * FROM transactions WHERE user_id = $user_id";
+
+if (!empty($filter_jenis)) {
+    $sql .= " AND jenis = '$filter_jenis'";
+}
+
+if (!empty($filter_start)) {
+    $sql .= " AND tanggal >= '$filter_start'";
+}
+
+if (!empty($filter_end)) {
+    $sql .= " AND tanggal <= '$filter_end'";
+}
+
+$sql .= " ORDER BY tanggal DESC, id DESC";
+
+$query = mysqli_query($conn, $sql);
+
 ?>
 
 <?php
@@ -37,17 +54,6 @@ $searchPlaceholder = 'Cari Transaksi...';
                     Histori Transaksi</h2>
             </div>
             <div class="flex items-center gap-3">
-                <div class="flex rounded-md overflow-hidden bg-surface-container-high p-1">
-                    <button
-                        class="px-4 py-2 text-xs font-semibold text-on-secondary-container hover:bg-white rounded transition-all">.xlsx</button>
-                    <button
-                        class="px-4 py-2 text-xs font-semibold text-on-secondary-container hover:bg-white rounded transition-all">.csv</button>
-                </div>
-                <button
-                    class="flex items-center gap-2 bg-surface-container-high text-primary font-semibold py-2.5 px-5 rounded-lg hover:bg-surface-container-highest transition-all text-sm">
-                    <span class="material-symbols-outlined text-lg">download</span>
-                    Download Laporan Keuangan
-                </button>
                 <button
                     class="flex items-center gap-2 bg-gradient-to-br from-primary to-primary-container text-white font-semibold py-2.5 px-6 rounded-lg shadow-lg shadow-emerald-500/10 hover:shadow-emerald-500/20 transition-all text-sm">
                     <span class="material-symbols-outlined text-lg">add</span>
@@ -61,30 +67,53 @@ $searchPlaceholder = 'Cari Transaksi...';
                 class="col-span-12 lg:col-span-8 bg-surface-container-lowest rounded-xl p-6 shadow-sm border border-outline-variant/10">
                 <div class="flex items-center justify-between mb-6">
                     <h3 class="font-['Manrope'] font-semibold text-on-surface">Filter Berdasarkan Tanggal</h3>
-                    <div class="flex items-center gap-2 text-primary text-sm font-medium cursor-pointer">
-                        <span class="material-symbols-outlined text-lg">calendar_today</span>
-                        30 Hari Terakhir
-                        <span class="material-symbols-outlined">expand_more</span>
-                    </div>
                 </div>
-                <div class="flex flex-wrap items-center gap-4">
-                    <div class="flex-1 min-w-[200px]">
-                        <label class="block text-[10px] font-bold text-outline uppercase mb-1 px-1">Dari Tanggal</label>
-                        <input
-                            class="w-full bg-surface-container-low border-none rounded-lg py-3 px-4 text-sm focus:ring-2 focus:ring-emerald-500/20 transition-all"
-                            type="date" value="2024-03-01" />
+                <form method="GET" class="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">
+                            Dari Tanggal
+                        </label>
+                        <input type="date" name="start_date" value="<?php echo htmlspecialchars($filter_start); ?>"
+                            class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500">
                     </div>
-                    <div class="flex-1 min-w-[200px]">
-                        <label class="block text-[10px] font-bold text-outline uppercase mb-1 px-1">Sampai
-                            Tanggal</label>
-                        <input
-                            class="w-full bg-surface-container-low border-none rounded-lg py-3 px-4 text-sm focus:ring-2 focus:ring-emerald-500/20 transition-all"
-                            type="date" value="2024-03-31" />
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">
+                            Sampai Tanggal
+                        </label>
+                        <input type="date" name="end_date" value="<?php echo htmlspecialchars($filter_end); ?>"
+                            class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500">
                     </div>
-                    <button
-                        class="mt-5 bg-secondary text-white py-3 px-8 rounded-lg font-semibold text-sm hover:opacity-90 transition-all self-end">Terapkan
-                        Filter</button>
-                </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">
+                            Jenis
+                        </label>
+                        <select name="jenis"
+                            class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                            <option value="">Semua</option>
+                            <option value="income" <?php echo $filter_jenis === 'income' ? 'selected' : ''; ?>>Income
+                            </option>
+                            <option value="expense" <?php echo $filter_jenis === 'expense' ? 'selected' : ''; ?>>Expense
+                            </option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <button type="submit"
+                            class="w-full rounded-xl bg-green-600 text-white px-5 py-3 font-semibold hover:bg-green-700 transition">
+                            Terapkan Filter
+                        </button>
+                    </div>
+
+                    <div>
+                        <button type="submit" formaction="process/export_transaction.php"
+                            class="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-slate-900 text-white px-5 py-3 font-semibold hover:bg-slate-800 transition">
+                            <span class="material-symbols-outlined text-[20px]">download</span>
+                            Download Laporan
+                        </button>
+                    </div>
+                </form>
             </div>
             <div
                 class="col-span-12 lg:col-span-4 bg-primary text-white rounded-xl p-6 shadow-xl relative overflow-hidden flex flex-col justify-between">
@@ -135,79 +164,79 @@ $searchPlaceholder = 'Cari Transaksi...';
                     </thead>
                     <tbody class="divide-y divide-outline-variant/10">
                         <?php if (mysqli_num_rows($query) > 0): ?>
-                            <?php while ($row = mysqli_fetch_assoc($query)): ?>
+                        <?php while ($row = mysqli_fetch_assoc($query)): ?>
 
-                                <tr class="group hover:bg-surface-container-highest transition-colors cursor-pointer relative">
+                        <tr class="group hover:bg-surface-container-highest transition-colors cursor-pointer relative">
 
-                                    <!-- DATE -->
-                                    <td class="px-6 py-4">
-                                        <div class="flex flex-col">
-                                            <span class="text-sm font-semibold text-on-surface">
-                                                <?php echo date('M d, Y', strtotime($row['tanggal'])); ?>
-                                            </span>
-                                        </div>
-                                        <div class="hidden group-hover:block absolute left-0 top-0 bottom-0 w-1 bg-primary">
-                                        </div>
-                                    </td>
+                            <!-- DATE -->
+                            <td class="px-6 py-4">
+                                <div class="flex flex-col">
+                                    <span class="text-sm font-semibold text-on-surface">
+                                        <?php echo date('M d, Y', strtotime($row['tanggal'])); ?>
+                                    </span>
+                                </div>
+                                <div class="hidden group-hover:block absolute left-0 top-0 bottom-0 w-1 bg-primary">
+                                </div>
+                            </td>
 
-                                    <!-- TYPE -->
-                                    <td class="px-6 py-4">
-                                        <?php if ($row['jenis'] == 'income'): ?>
-                                            <span
-                                                class="px-2 py-1 rounded bg-secondary-container text-on-secondary-container text-[10px] font-bold uppercase">
-                                                Dana Masuk
-                                            </span>
-                                        <?php else: ?>
-                                            <span
-                                                class="px-2 py-1 rounded bg-error-container text-on-error-container text-[10px] font-bold uppercase">
-                                                Dana Keluar
-                                            </span>
-                                        <?php endif; ?>
-                                    </td>
+                            <!-- TYPE -->
+                            <td class="px-6 py-4">
+                                <?php if ($row['jenis'] == 'income'): ?>
+                                <span
+                                    class="px-2 py-1 rounded bg-secondary-container text-on-secondary-container text-[10px] font-bold uppercase">
+                                    Dana Masuk
+                                </span>
+                                <?php else: ?>
+                                <span
+                                    class="px-2 py-1 rounded bg-error-container text-on-error-container text-[10px] font-bold uppercase">
+                                    Dana Keluar
+                                </span>
+                                <?php endif; ?>
+                            </td>
 
-                                    <!-- DESCRIPTION -->
-                                    <td class="px-6 py-4">
-                                        <p class="text-sm font-medium text-on-surface">
-                                            <?php echo $row['keterangan']; ?>
-                                        </p>
-                                    </td>
+                            <!-- DESCRIPTION -->
+                            <td class="px-6 py-4">
+                                <p class="text-sm font-medium text-on-surface">
+                                    <?php echo $row['keterangan']; ?>
+                                </p>
+                            </td>
 
-                                    <!-- ACCOUNT (sementara dummy dulu) -->
-                                    <td class="px-6 py-4 text-right">
-                                        <span class="text-xs font-semibold text-secondary uppercase">
-                                            -
-                                        </span>
-                                    </td>
+                            <!-- ACCOUNT (sementara dummy dulu) -->
+                            <td class="px-6 py-4 text-right">
+                                <span class="text-xs font-semibold text-secondary uppercase">
+                                    -
+                                </span>
+                            </td>
 
-                                    <!-- AMOUNT -->
-                                    <td class="px-6 py-4 text-right">
-                                        <?php if ($row['jenis'] == 'income'): ?>
-                                            <span class="text-sm font-bold text-primary">
-                                                +Rp<?php echo number_format($row['jumlah'], 0, ',', '.'); ?>
-                                            </span>
-                                        <?php else: ?>
-                                            <span class="text-sm font-bold text-tertiary">
-                                                -Rp<?php echo number_format($row['jumlah'], 0, ',', '.'); ?>
-                                            </span>
-                                        <?php endif; ?>
-                                    </td>
+                            <!-- AMOUNT -->
+                            <td class="px-6 py-4 text-right">
+                                <?php if ($row['jenis'] == 'income'): ?>
+                                <span class="text-sm font-bold text-primary">
+                                    +Rp<?php echo number_format($row['jumlah'], 0, ',', '.'); ?>
+                                </span>
+                                <?php else: ?>
+                                <span class="text-sm font-bold text-tertiary">
+                                    -Rp<?php echo number_format($row['jumlah'], 0, ',', '.'); ?>
+                                </span>
+                                <?php endif; ?>
+                            </td>
 
-                                    <!-- ACTION -->
-                                    <td class="px-6 py-4 text-right">
-                                        <button class="text-outline hover:text-primary">
-                                            <span class="material-symbols-outlined text-xl">more_vert</span>
-                                        </button>
-                                    </td>
+                            <!-- ACTION -->
+                            <td class="px-6 py-4 text-right">
+                                <button class="text-outline hover:text-primary">
+                                    <span class="material-symbols-outlined text-xl">more_vert</span>
+                                </button>
+                            </td>
 
-                                </tr>
+                        </tr>
 
-                            <?php endwhile; ?>
+                        <?php endwhile; ?>
                         <?php else: ?>
-                            <tr>
-                                <td colspan="6" class="text-center py-6 text-slate-400">
-                                    Belum ada transaksi
-                                </td>
-                            </tr>
+                        <tr>
+                            <td colspan="6" class="text-center py-6 text-slate-400">
+                                Belum ada transaksi
+                            </td>
+                        </tr>
                         <?php endif; ?>
                     </tbody>
                 </table>
@@ -241,7 +270,7 @@ $searchPlaceholder = 'Cari Transaksi...';
     <footer
         class="ml-64 p-6 flex justify-between items-center bg-slate-50 dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800">
         <div class="flex items-center gap-6">
-            <span class="font-['Inter'] text-xs text-slate-400">© 2026 The CashTrack. All rights reserved.</span>
+            <span class="font-['Inter'] text-xs text-slate-400">© 2024 The CashTrack. All rights reserved.</span>
             <div class="flex items-center gap-4">
                 <a class="font-['Inter'] text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
                     href="#">Privacy Policy</a>
