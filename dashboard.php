@@ -188,7 +188,7 @@ $searchPlaceholder = 'Cari Buku Besar Aset...';
                 </div>
 
                 <div class="flex items-baseline gap-1">
-                    <span class="text-4xl font-bold font-headline tracking-tight">
+                    <span class="text-3xl font-bold font-headline tracking-tight">
                         Rp<?php echo number_format($total_balance, 0, ',', '.'); ?>
                     </span>
                 </div>
@@ -213,7 +213,7 @@ $searchPlaceholder = 'Cari Buku Besar Aset...';
                 </div>
 
                 <div class="flex items-baseline gap-1">
-                    <span class="text-4xl font-bold font-headline tracking-tight">
+                    <span class="text-3xl font-bold font-headline tracking-tight">
                         Rp<?php echo number_format($income_month, 0, ',', '.'); ?>
                     </span>
                 </div>
@@ -243,7 +243,7 @@ $searchPlaceholder = 'Cari Buku Besar Aset...';
                 </div>
 
                 <div class="flex items-baseline gap-1">
-                    <span class="text-4xl font-bold font-headline tracking-tight">
+                    <span class="text-3xl font-bold font-headline tracking-tight">
                         Rp<?php echo number_format($expense_month, 0, ',', '.'); ?>
                     </span>
                 </div>
@@ -272,8 +272,8 @@ $searchPlaceholder = 'Cari Buku Besar Aset...';
                     </div>
                 </div>
 
-                <div class="flex items-baseline gap-1">
-                    <span class="text-4xl font-bold font-headline tracking-tight">
+                <div class="flex items-baseline gap-1 overflow-hidden">
+                    <span class="text-3xl font-bold truncate">
                         Rp<?php echo number_format($total_assets, 0, ',', '.'); ?>
                     </span>
                 </div>
@@ -361,8 +361,7 @@ $searchPlaceholder = 'Cari Buku Besar Aset...';
                     </div>
                 </div>
                 <!-- Upcoming Payments -->
-                <div
-                    class="bg-surface-container-lowest rounded-xl p-6 shadow-[0px_4px_20px_rgba(0,0,0,0.02)] border-l-4 border-primary">
+                <div class="bg-surface-container-lowest rounded-xl p-6 shadow-[0px_4px_20px_rgba(0,0,0,0.02)]">
                     <h4 class="text-sm font-bold font-headline mb-4 uppercase tracking-widest text-slate-400">
                         Tagihan Mendatang
                     </h4>

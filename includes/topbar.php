@@ -16,10 +16,11 @@ $showLogoutButton = $showLogoutButton ?? false;
     </div>
 
     <div class="flex items-center gap-4 ml-6">
-        <button class="p-2 text-slate-500 hover:text-emerald-500 transition-colors relative">
+        <a href="notifications.php"
+            class="p-2 text-slate-500 hover:text-emerald-500 transition-colors relative inline-block">
             <span class="material-symbols-outlined">notifications</span>
             <span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full border-2 border-white"></span>
-        </button>
+        </a>
 
         <?php if ($showLogoutButton): ?>
             <a href="process/logout.php"
