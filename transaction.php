@@ -139,7 +139,7 @@ $searchPlaceholder = 'Cari Transaksi...';
 
                     <div>
                         <button type="submit"
-                            class="mt-5 bg-secondary text-white py-3 px-8 rounded-lg font-semibold text-sm hover:opacity-90 transition-all self-end">Terapkan
+                            class="flex items-center gap-2 bg-gradient-to-br from-primary to-primary-container text-white font-semibold py-2.5 px-6 rounded-lg shadow-lg shadow-emerald-500/10 hover:shadow-emerald-500/20 transition-all text-sm">Terapkan
                             Filter
                         </button>
                     </div>
@@ -183,22 +183,22 @@ $searchPlaceholder = 'Cari Transaksi...';
                     <div class="flex items-center gap-1">
 
                         <?php if ($page > 1): ?>
-                            <a href="?page=<?php echo $page - 1; ?>&limit=<?php echo $limit; ?>&jenis=<?php echo $filter_jenis; ?>&start_date=<?php echo $filter_start; ?>&end_date=<?php echo $filter_end; ?>"
-                                class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-gray-100 text-gray-500 transition">
+                        <a href="?page=<?php echo $page - 1; ?>&limit=<?php echo $limit; ?>&jenis=<?php echo $filter_jenis; ?>&start_date=<?php echo $filter_start; ?>&end_date=<?php echo $filter_end; ?>"
+                            class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-gray-100 text-gray-500 transition">
 
-                                <span class="material-symbols-outlined">chevron_left</span>
+                            <span class="material-symbols-outlined">chevron_left</span>
 
-                            </a>
+                        </a>
                         <?php endif; ?>
 
 
                         <?php if ($page < $total_pages): ?>
-                            <a href="?page=<?php echo $page + 1; ?>&limit=<?php echo $limit; ?>&jenis=<?php echo $filter_jenis; ?>&start_date=<?php echo $filter_start; ?>&end_date=<?php echo $filter_end; ?>"
-                                class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-gray-100 text-gray-500 transition">
+                        <a href="?page=<?php echo $page + 1; ?>&limit=<?php echo $limit; ?>&jenis=<?php echo $filter_jenis; ?>&start_date=<?php echo $filter_start; ?>&end_date=<?php echo $filter_end; ?>"
+                            class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-gray-100 text-gray-500 transition">
 
-                                <span class="material-symbols-outlined">chevron_right</span>
+                            <span class="material-symbols-outlined">chevron_right</span>
 
-                            </a>
+                        </a>
                         <?php endif; ?>
 
                     </div>
@@ -219,79 +219,79 @@ $searchPlaceholder = 'Cari Transaksi...';
                     </thead>
                     <tbody class="divide-y divide-outline-variant/10">
                         <?php if (mysqli_num_rows($query) > 0): ?>
-                            <?php while ($row = mysqli_fetch_assoc($query)): ?>
+                        <?php while ($row = mysqli_fetch_assoc($query)): ?>
 
-                                <tr class="group hover:bg-surface-container-highest transition-colors cursor-pointer relative">
+                        <tr class="group hover:bg-surface-container-highest transition-colors cursor-pointer relative">
 
-                                    <!-- DATE -->
-                                    <td class="px-6 py-4">
-                                        <div class="flex flex-col">
-                                            <span class="text-sm font-semibold text-on-surface">
-                                                <?php echo date('M d, Y', strtotime($row['tanggal'])); ?>
-                                            </span>
-                                        </div>
-                                        <div class="hidden group-hover:block absolute left-0 top-0 bottom-0 w-1 bg-primary">
-                                        </div>
-                                    </td>
+                            <!-- DATE -->
+                            <td class="px-6 py-4">
+                                <div class="flex flex-col">
+                                    <span class="text-sm font-semibold text-on-surface">
+                                        <?php echo date('M d, Y', strtotime($row['tanggal'])); ?>
+                                    </span>
+                                </div>
+                                <div class="hidden group-hover:block absolute left-0 top-0 bottom-0 w-1 bg-primary">
+                                </div>
+                            </td>
 
-                                    <!-- TYPE -->
-                                    <td class="px-6 py-4">
-                                        <?php if ($row['jenis'] == 'income'): ?>
-                                            <span
-                                                class="px-2 py-1 rounded bg-secondary-container text-on-secondary-container text-[10px] font-bold uppercase">
-                                                Dana Masuk
-                                            </span>
-                                        <?php else: ?>
-                                            <span
-                                                class="px-2 py-1 rounded bg-error-container text-on-error-container text-[10px] font-bold uppercase">
-                                                Dana Keluar
-                                            </span>
-                                        <?php endif; ?>
-                                    </td>
+                            <!-- TYPE -->
+                            <td class="px-6 py-4">
+                                <?php if ($row['jenis'] == 'income'): ?>
+                                <span
+                                    class="px-2 py-1 rounded bg-secondary-container text-on-secondary-container text-[10px] font-bold uppercase">
+                                    Dana Masuk
+                                </span>
+                                <?php else: ?>
+                                <span
+                                    class="px-2 py-1 rounded bg-error-container text-on-error-container text-[10px] font-bold uppercase">
+                                    Dana Keluar
+                                </span>
+                                <?php endif; ?>
+                            </td>
 
-                                    <!-- DESCRIPTION -->
-                                    <td class="px-6 py-4">
-                                        <p class="text-sm font-medium text-on-surface">
-                                            <?php echo $row['keterangan']; ?>
-                                        </p>
-                                    </td>
+                            <!-- DESCRIPTION -->
+                            <td class="px-6 py-4">
+                                <p class="text-sm font-medium text-on-surface">
+                                    <?php echo $row['keterangan']; ?>
+                                </p>
+                            </td>
 
-                                    <!-- ACCOUNT (sementara dummy dulu) -->
-                                    <td class="px-6 py-4 text-right">
-                                        <span class="text-xs font-semibold text-secondary uppercase">
-                                            -
-                                        </span>
-                                    </td>
+                            <!-- ACCOUNT (sementara dummy dulu) -->
+                            <td class="px-6 py-4 text-right">
+                                <span class="text-xs font-semibold text-secondary uppercase">
+                                    -
+                                </span>
+                            </td>
 
-                                    <!-- AMOUNT -->
-                                    <td class="px-6 py-4 text-right">
-                                        <?php if ($row['jenis'] == 'income'): ?>
-                                            <span class="text-sm font-bold text-primary">
-                                                +Rp<?php echo number_format($row['jumlah'], 0, ',', '.'); ?>
-                                            </span>
-                                        <?php else: ?>
-                                            <span class="text-sm font-bold text-tertiary">
-                                                -Rp<?php echo number_format($row['jumlah'], 0, ',', '.'); ?>
-                                            </span>
-                                        <?php endif; ?>
-                                    </td>
+                            <!-- AMOUNT -->
+                            <td class="px-6 py-4 text-right">
+                                <?php if ($row['jenis'] == 'income'): ?>
+                                <span class="text-sm font-bold text-primary">
+                                    +Rp<?php echo number_format($row['jumlah'], 0, ',', '.'); ?>
+                                </span>
+                                <?php else: ?>
+                                <span class="text-sm font-bold text-tertiary">
+                                    -Rp<?php echo number_format($row['jumlah'], 0, ',', '.'); ?>
+                                </span>
+                                <?php endif; ?>
+                            </td>
 
-                                    <!-- ACTION -->
-                                    <td class="px-6 py-4 text-right">
-                                        <button class="text-outline hover:text-primary">
-                                            <span class="material-symbols-outlined text-xl">more_vert</span>
-                                        </button>
-                                    </td>
+                            <!-- ACTION -->
+                            <td class="px-6 py-4 text-right">
+                                <button class="text-outline hover:text-primary">
+                                    <span class="material-symbols-outlined text-xl">more_vert</span>
+                                </button>
+                            </td>
 
-                                </tr>
+                        </tr>
 
-                            <?php endwhile; ?>
+                        <?php endwhile; ?>
                         <?php else: ?>
-                            <tr>
-                                <td colspan="6" class="text-center py-6 text-slate-400">
-                                    Belum ada transaksi
-                                </td>
-                            </tr>
+                        <tr>
+                            <td colspan="6" class="text-center py-6 text-slate-400">
+                                Belum ada transaksi
+                            </td>
+                        </tr>
                         <?php endif; ?>
                     </tbody>
                 </table>
