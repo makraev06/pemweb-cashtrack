@@ -10,6 +10,7 @@ $showLogoutButton = $showLogoutButton ?? false;
                 <span class="material-symbols-outlined text-[20px]">search</span>
             </span>
             <input
+                id="searchTransaksi"
                 class="w-full bg-surface-container-low border-none rounded-lg pl-10 py-2 text-sm focus:ring-0 placeholder:text-slate-400"
                 placeholder="<?= htmlspecialchars($searchPlaceholder); ?>" type="text" />
         </div>
