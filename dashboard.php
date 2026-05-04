@@ -388,10 +388,6 @@ $searchPlaceholder = 'Cari Buku Besar Aset...';
                             </div>
                             <span class="text-sm font-bold text-primary">Rp450,000</span>
                         </div>
-                        <button
-                            class="w-full mt-2 py-3 bg-secondary/5 text-primary rounded-lg text-xs font-bold hover:bg-primary/10 transition-colors">
-                            LIHAT KALENDER LENGKAP
-                        </button>
                     </div>
                 </div>
             </div>
