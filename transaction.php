@@ -290,10 +290,6 @@ $searchPlaceholder = 'Cari transaksi...';
                                         <div
                                             class="flex items-center justify-between text-sm font-semibold text-on-surface mb-2">
                                             <span><?php echo $day; ?></span>
-                                            <?php if ($hasData): ?>
-                                                <span
-                                                    class="rounded-full bg-slate-200 px-2 py-0.5 text-[10px] uppercase text-slate-500">Detil</span>
-                                            <?php endif; ?>
                                         </div>
                                         <?php if ($data['income'] > 0): ?>
                                             <div class="text-xs font-semibold text-emerald-600">
