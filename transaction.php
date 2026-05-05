@@ -147,6 +147,7 @@ $query = mysqli_stmt_get_result($stmt);
 
 $activePage = 'transaction';
 $searchPlaceholder = 'Cari transaksi...';
+$hideSearch = true;
 ?>
 
 <!DOCTYPE html>
@@ -346,33 +347,45 @@ $searchPlaceholder = 'Cari transaksi...';
         </div>
         <!-- Transactions Table Container -->
         <div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/10 overflow-hidden">
-            <div class="p-6 flex items-center justify-between bg-surface-container-low/50">
-                <h3 class="font-['Manrope'] font-semibold text-on-surface">Catatan Transaksi Terbaru</h3>
-                <div class="flex items-center gap-4">
-                    <span class="text-xs text-outline font-medium">
-                        Menampilkan <?php echo $start_data; ?>-<?php echo $show_end; ?> dari <?php echo $total_data; ?>
-                    </span>
-                    <div class="flex items-center gap-1">
+            <div class="p-6 bg-surface-container-low/50">
+                <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+                    <div class="space-y-3">
+                        <h3 class="font-['Manrope'] font-semibold text-on-surface">Catatan Transaksi Terbaru</h3>
+                        <div class="relative w-full max-w-xl focus-within:ring-2 focus-within:ring-emerald-500/20 rounded-lg">
+                            <span class="absolute inset-y-0 left-3 flex items-center text-slate-400">
+                                <span class="material-symbols-outlined text-[20px]">search</span>
+                            </span>
+                            <input id="searchTransaksi"
+                                class="w-full bg-surface-container-lowest border-none rounded-lg pl-10 py-2 text-sm focus:ring-0 placeholder:text-slate-400 input-focus"
+                                placeholder="<?php echo htmlspecialchars($searchPlaceholder); ?>" type="text" />
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <span class="text-xs text-outline font-medium">
+                            Menampilkan <?php echo $start_data; ?>-<?php echo $show_end; ?> dari <?php echo $total_data; ?>
+                        </span>
+                        <div class="flex items-center gap-1">
 
-                        <?php if ($page > 1): ?>
-                            <a href="?page=<?php echo $page - 1; ?>&limit=<?php echo $limit; ?>&jenis=<?php echo $filter_jenis; ?>&start_date=<?php echo $filter_start; ?>&end_date=<?php echo $filter_end; ?>"
-                                class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-gray-100 text-gray-500 transition">
+                            <?php if ($page > 1): ?>
+                                <a href="?page=<?php echo $page - 1; ?>&limit=<?php echo $limit; ?>&jenis=<?php echo $filter_jenis; ?>&start_date=<?php echo $filter_start; ?>&end_date=<?php echo $filter_end; ?>"
+                                    class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-gray-100 text-gray-500 transition">
 
-                                <span class="material-symbols-outlined">chevron_left</span>
+                                    <span class="material-symbols-outlined">chevron_left</span>
 
-                            </a>
-                        <?php endif; ?>
+                                </a>
+                            <?php endif; ?>
 
 
-                        <?php if ($page < $total_pages): ?>
-                            <a href="?page=<?php echo $page + 1; ?>&limit=<?php echo $limit; ?>&jenis=<?php echo $filter_jenis; ?>&start_date=<?php echo $filter_start; ?>&end_date=<?php echo $filter_end; ?>"
-                                class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-gray-100 text-gray-500 transition">
+                            <?php if ($page < $total_pages): ?>
+                                <a href="?page=<?php echo $page + 1; ?>&limit=<?php echo $limit; ?>&jenis=<?php echo $filter_jenis; ?>&start_date=<?php echo $filter_start; ?>&end_date=<?php echo $filter_end; ?>"
+                                    class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-gray-100 text-gray-500 transition">
 
-                                <span class="material-symbols-outlined">chevron_right</span>
+                                    <span class="material-symbols-outlined">chevron_right</span>
 
-                            </a>
-                        <?php endif; ?>
+                                </a>
+                            <?php endif; ?>
 
+                        </div>
                     </div>
                 </div>
             </div>

@@ -151,6 +151,7 @@ while ($row = mysqli_fetch_assoc($query_chart)) {
 <?php
 $activePage = 'dashboard';
 $searchPlaceholder = 'Cari Buku Besar Aset...';
+$hideSearch = true;
 
 ?>
 <!DOCTYPE html>

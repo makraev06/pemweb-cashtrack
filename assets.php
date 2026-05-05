@@ -30,6 +30,7 @@ $total_item = $data_total['total_item'] ?? 0;
 $activePage = 'assets';
 $searchPlaceholder = 'Cari Assets...';
 $topbarTitle = 'Assets';
+$hideSearch = true;
 ?>
 <!DOCTYPE html>
 <html class="light" lang="en">
@@ -108,24 +109,36 @@ $topbarTitle = 'Assets';
         </section>
 
         <section class="space-y-6">
-            <div class="flex items-center justify-between">
-                <h2 class="font-['Manrope'] text-2xl font-bold text-on-surface">Kepemilikan Aset</h2>
+            <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="font-['Manrope'] text-2xl font-bold text-on-surface">Kepemilikan Aset</h2>
 
-                <div class="flex items-center gap-2">
-                    <span class="text-xs font-medium text-slate-400">Urutkan:</span>
-                    <select
-                        class="cursor-pointer border-none bg-transparent text-xs font-bold text-primary focus:ring-0">
-                        <option>Nilai (Tinggi-Rendah)</option>
-                        <option>Category</option>
-                        <option>Alphabetical</option>
-                    </select>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-medium text-slate-400">Urutkan:</span>
+                        <select
+                            class="cursor-pointer border-none bg-transparent text-xs font-bold text-primary focus:ring-0">
+                            <option>Nilai (Tinggi-Rendah)</option>
+                            <option>Category</option>
+                            <option>Alphabetical</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="relative w-full max-w-xl focus-within:ring-2 focus-within:ring-emerald-500/20 rounded-lg">
+                    <span class="absolute inset-y-0 left-3 flex items-center text-slate-400">
+                        <span class="material-symbols-outlined text-[20px]">search</span>
+                    </span>
+                    <input id="searchAset"
+                        class="w-full bg-surface-container-lowest border-none rounded-lg pl-10 py-2 text-sm shadow-sm focus:ring-0 placeholder:text-slate-400 input-focus"
+                        placeholder="Cari aset yang dimiliki..." type="text" />
                 </div>
             </div>
 
             <?php if (mysqli_num_rows($query_assets) > 0): ?>
                 <div class="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
                     <?php while ($row = mysqli_fetch_assoc($query_assets)): ?>
-                        <div class="rounded-xl bg-surface-container-lowest p-6 shadow">
+                        <div class="asset-item rounded-xl bg-surface-container-lowest p-6 shadow"
+                            data-search="<?php echo htmlspecialchars(strtolower(($row['nama_aset'] ?? '') . ' ' . ($row['kategori'] ?? '') . ' ' . ($row['deskripsi'] ?? '') . ' ' . ($row['tanggal_perolehan'] ?? '') . ' ' . ($row['nilai'] ?? ''))); ?>">
                             <div class="flex items-start justify-between gap-3">
                                 <div>
                                     <h3 class="text-lg font-bold">
@@ -151,6 +164,11 @@ $topbarTitle = 'Assets';
                             </p>
                         </div>
                     <?php endwhile; ?>
+                </div>
+
+                <div id="assetSearchEmpty"
+                    class="hidden rounded-xl bg-surface-container-lowest p-10 text-center shadow">
+                    <p class="text-slate-400">Aset tidak ditemukan.</p>
                 </div>
 
                 <div class="flex justify-center border-t border-outline-variant/10 bg-slate-50 px-6 py-4">
@@ -189,6 +207,32 @@ $topbarTitle = 'Assets';
             </div>
         </div>
     </footer>
+    <script>
+        const assetSearchInput = document.getElementById('searchAset');
+        const assetItems = document.querySelectorAll('.asset-item');
+        const assetSearchEmpty = document.getElementById('assetSearchEmpty');
+
+        if (assetSearchInput) {
+            assetSearchInput.addEventListener('input', function () {
+                const keyword = this.value.toLowerCase();
+                let visibleCount = 0;
+
+                assetItems.forEach(item => {
+                    const text = item.getAttribute('data-search') || '';
+                    const isVisible = text.includes(keyword);
+
+                    item.style.display = isVisible ? '' : 'none';
+                    if (isVisible) {
+                        visibleCount++;
+                    }
+                });
+
+                if (assetSearchEmpty) {
+                    assetSearchEmpty.classList.toggle('hidden', visibleCount > 0);
+                }
+            });
+        }
+    </script>
 </body>
 
 </html>
