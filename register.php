@@ -32,10 +32,7 @@
                         secondary: "#416652",
                         "secondary-container": "#c0e9cf",
                         "surface-container-lowest": "#ffffff",
-                        "primary-fixed-dim": "#71dba6",
-                        "surface-bright": "#f7f9fc",
-                        "on-error-container": "#93000a",
-                        "on-tertiary-fixed-variant": "#7d2a2a",
+                        "on-primary-fixed": "#002113",
                         "inverse-surface": "#2d3133",
                         "on-primary": "#ffffff",
                         "surface-dim": "#d8dadd",
@@ -112,17 +109,14 @@
 
 <body
     class="bg-surface text-on-surface font-body min-h-screen flex flex-col items-center justify-center relative overflow-hidden opacity-0">
-    <!-- Subtle Financial-Themed Background Illustration -->
     <div class="absolute inset-0 z-0 opacity-10 pointer-events-none">
         <img class="w-full h-full object-cover"
             data-alt="Abstract complex network of interconnected lines and data nodes representing global financial digital ledgers in deep emerald and silver tones"
             src="https://lh3.googleusercontent.com/aida-public/AB6AXuAT7o5dTYlUDBzCRtYCiLHoI6zBCK6yT4ly0V0-esA_CPRoqRs8QSNeEwhIXDwmbLunpX4cvBjIeauqzGLTGEsNRjsQYu7FZ91cX-Ywu1etHXrL1A_tkvQbdSOFv1riIDYpCBdHMuGAvVlpjLiY9Z5rWnlZe1HnNl5dzQCO88sCbQ28Ifjx_wZSKoSTrVZJbq25cLtnD60IirY0O0SpUp9lUdQWvfx8ZKRbiK-khBp0mYwtGG2TQH70NdSa-QBn5takzRhdkj8hHjgt" />
     </div>
-    <!-- Background Gradient Glows -->
     <div class="absolute -top-24 -left-24 w-96 h-96 bg-primary/10 rounded-full blur-[100px] z-0"></div>
     <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-secondary/10 rounded-full blur-[100px] z-0"></div>
     <main class="relative z-10 w-full max-w-md px-6 animate-fade-up">
-        <!-- Logo Section -->
         <div class="text-center mb-10">
             <div
                 class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-primary to-primary-container rounded-xl shadow-lg mb-4">
@@ -133,11 +127,10 @@
                 CashTrack
             </h1>
             <p class="font-body text-on-surface-variant mt-2">
-                Aplikasi Pencatat Keuangan
+                Daftar akun baru untuk mencatat keuangan Anda.
             </p>
         </div>
 
-        <!-- Error Message -->
         <?php if (isset($_GET['error'])): ?>
             <div
                 class="mb-4 rounded-lg border border-red-300 bg-red-50 px-4 py-3 text-center text-sm font-medium text-red-600">
@@ -151,58 +144,64 @@
             </div>
         <?php endif; ?>
 
-        <!-- Login Card -->
-        <form action="process/login_process.php" method="POST">
-
-            <!-- EMAIL -->
-            <div class="mb-4">
-                <label class="block font-label text-label-sm font-semibold text-on-surface-variant mb-2">
-                    EMAIL
-                </label>
+        <form action="process/register_process.php" method="POST" class="space-y-4">
+            <div>
+                <label class="block font-label text-label-sm font-semibold text-on-surface-variant mb-2">NAMA
+                    LENGKAP</label>
                 <div class="relative">
                     <span
-                        class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-lg">
-                        mail
-                    </span>
-
-                    <!-- INPUT EMAIL -->
+                        class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-lg">person</span>
                     <input
                         class="w-full pl-10 pr-4 py-3 bg-surface-container-lowest border border-outline-variant/30 rounded-lg transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary"
-                        name="email" type="email" placeholder="Masukan E-mail" required />
+                        name="name" type="text" placeholder="Masukkan nama lengkap" required />
                 </div>
             </div>
 
-            <!-- PASSWORD -->
-            <div class="mb-4">
-                <label class="block font-label text-label-sm font-semibold text-on-surface-variant">
-                    PASSWORD
-                </label>
+            <div>
+                <label class="block font-label text-label-sm font-semibold text-on-surface-variant mb-2">EMAIL</label>
                 <div class="relative">
                     <span
-                        class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-lg">
-                        lock
-                    </span>
-
-                    <!-- INPUT PASSWORD -->
+                        class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-lg">mail</span>
                     <input
-                        class="w-full pl-10 pr-12 py-3 bg-surface-container-lowest border border-outline-variant/30 rounded-lg transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary"
-                        name="password" type="password" placeholder="Masukan Password" required />
+                        class="w-full pl-10 pr-4 py-3 bg-surface-container-lowest border border-outline-variant/30 rounded-lg transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary"
+                        name="email" type="email" placeholder="Masukkan email" required />
                 </div>
             </div>
 
-            <!-- BUTTON -->
+            <div>
+                <label
+                    class="block font-label text-label-sm font-semibold text-on-surface-variant mb-2">PASSWORD</label>
+                <div class="relative">
+                    <span
+                        class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-lg">lock</span>
+                    <input
+                        class="w-full pl-10 pr-4 py-3 bg-surface-container-lowest border border-outline-variant/30 rounded-lg transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary"
+                        name="password" type="password" placeholder="Minimal 6 karakter" required />
+                </div>
+            </div>
+
+            <div>
+                <label class="block font-label text-label-sm font-semibold text-on-surface-variant mb-2">KONFIRMASI
+                    PASSWORD</label>
+                <div class="relative">
+                    <span
+                        class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-lg">lock</span>
+                    <input
+                        class="w-full pl-10 pr-4 py-3 bg-surface-container-lowest border border-outline-variant/30 rounded-lg transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary"
+                        name="password_confirmation" type="password" placeholder="Ulangi password" required />
+                </div>
+            </div>
+
             <button
-                class="w-full mt-5 py-4 bg-gradient-to-br from-primary to-primary-container text-white font-headline font-semibold rounded-lg hover:shadow-lg hover:brightness-110 transition-all duration-200 active:scale-95 focus:outline-none focus:ring-4 focus:ring-primary/20"
+                class="w-full mt-2 py-4 bg-gradient-to-br from-primary to-primary-container text-white font-headline font-semibold rounded-lg hover:shadow-lg hover:brightness-110 transition-all duration-200 active:scale-95 focus:outline-none focus:ring-4 focus:ring-primary/20"
                 type="submit">
-                Login
+                Daftar Sekarang
             </button>
         </form>
 
-
-        <!-- Footer Links -->
         <p class="text-center mt-8 text-on-surface-variant text-sm">
-            Belum punya akun?
-            <a class="font-semibold text-primary hover:underline ml-1" href="register.php">Daftar sekarang</a>
+            Sudah punya akun?
+            <a class="font-semibold text-primary hover:underline ml-1" href="login.php">Masuk di sini</a>
         </p>
         <div class="mt-12 flex justify-center gap-6">
             <a class="text-xs text-outline hover:text-on-surface-variant transition-colors" href="#">Privacy Policy</a>
@@ -211,7 +210,6 @@
             <a class="text-xs text-outline hover:text-on-surface-variant transition-colors" href="#">Support</a>
         </div>
     </main>
-    <!-- Version Tag -->
     <div class="absolute bottom-6 left-1/2 -translate-x-1/2">
         <span class="text-[10px] font-label font-bold tracking-widest text-outline uppercase">v2.4.1 SECURE
             ACCESS</span>
@@ -220,7 +218,7 @@
         document.addEventListener('DOMContentLoaded', function () {
             document.body.classList.remove('opacity-0');
 
-            var pageLinks = document.querySelectorAll('a[href="register.php"]');
+            var pageLinks = document.querySelectorAll('a[href="login.php"]');
             pageLinks.forEach(function (link) {
                 link.addEventListener('click', function (event) {
                     event.preventDefault();
