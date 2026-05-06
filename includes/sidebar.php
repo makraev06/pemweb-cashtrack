@@ -35,6 +35,10 @@ function navClass($key, $activePage)
             <span class="material-symbols-outlined">account_balance_wallet</span>
             <span>Transactions</span>
         </a>
+        <a class="<?= navClass('chart', $activePage); ?> nav-hover" href="chart.php">
+            <span class="material-symbols-outlined">pie_chart</span>
+            <span>Charts</span>
+        </a>
         <a class="<?= navClass('assets', $activePage); ?> nav-hover" href="assets.php">
             <span class="material-symbols-outlined">account_balance</span>
             <span>Assets</span>
