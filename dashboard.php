@@ -22,8 +22,14 @@ $query_expense = mysqli_query($conn, "
 $data_expense = mysqli_fetch_assoc($query_expense);
 $total_expense = $data_expense['total_expense'] ?? 0;
 
-// total balance
-$total_balance = $total_income - $total_expense;
+// total balance berdasarkan saldo akun
+$query_total_balance = mysqli_query($conn, "
+    SELECT SUM(balance) as total_balance
+    FROM accounts
+    WHERE user_id = $user_id
+");
+$data_total_balance = mysqli_fetch_assoc($query_total_balance);
+$total_balance = $data_total_balance['total_balance'] ?? 0;
 
 
 // income hari ini
@@ -195,7 +201,7 @@ $hideSearch = true;
                 </div>
 
                 <div class="mt-5">
-                    <span class="text-xs text-slate-400 font-medium">Saldo bersih dari seluruh transaksi</span>
+                    <span class="text-xs text-slate-400 font-medium">Total saldo dari semua akun yang dimiliki</span>
                 </div>
             </div>
 
@@ -288,7 +294,7 @@ $hideSearch = true;
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             <!-- Income vs Expense Chart -->
             <div
-                class="lg:col-span-8 bg-surface-container-lowest rounded-xl p-8 shadow-[0px_4px_20px_rgba(0,0,0,0.02)] h-full">
+                class="lg:col-span-12 bg-surface-container-lowest rounded-xl p-8 shadow-[0px_4px_20px_rgba(0,0,0,0.02)] h-full">
                 <div class="flex justify-between items-center mb-8">
                     <div>
                         <h4 class="text-xl font-bold font-headline text-on-surface">
@@ -313,83 +319,6 @@ $hideSearch = true;
                 <div
                     class="relative w-full h-[320px] bg-surface-container-low/30 rounded-lg overflow-hidden border border-outline-variant/10">
                     <canvas id="financeChart" height="100"></canvas>
-                </div>
-            </div>
-            <!-- Side Widgets -->
-            <div class="lg:col-span-4 space-y-6">
-                <!-- Recent Alerts -->
-                <div class="bg-surface-container-lowest rounded-xl p-6 shadow-[0px_4px_20px_rgba(0,0,0,0.02)]">
-                    <h4 class="text-sm font-bold font-headline mb-4 uppercase tracking-widest text-slate-400">
-                        Peringatan Penting
-                    </h4>
-                    <div class="space-y-4">
-                        <div class="flex gap-4 p-3 rounded-lg hover:bg-surface-container-low transition-colors group">
-                            <div
-                                class="w-8 h-8 rounded-full bg-error-container text-error flex items-center justify-center shrink-0">
-                                <span class="material-symbols-outlined text-[18px]"
-                                    style="font-variation-settings: &quot;FILL&quot; 1">warning</span>
-                            </div>
-                            <div>
-                                <p class="text-sm font-bold text-on-surface leading-tight">
-                                    Transaksi Penarikan Besar Terdeteksi
-                                </p>
-                                <p class="text-xs text-slate-500 mt-1">
-                                    Akun Acme corp ditandai karena aktivitas mencurigakan sebesar Rp2.000.000
-                                </p>
-                                <p class="text-[10px] text-slate-400 mt-2 font-semibold">
-                                    2 MENIT LALU
-                                </p>
-                            </div>
-                        </div>
-                        <div class="flex gap-4 p-3 rounded-lg hover:bg-surface-container-low transition-colors group">
-                            <div
-                                class="w-8 h-8 rounded-full bg-secondary-container text-secondary flex items-center justify-center shrink-0">
-                                <span class="material-symbols-outlined text-[18px]"
-                                    style="font-variation-settings: &quot;FILL&quot; 1">shield</span>
-                            </div>
-                            <div>
-                                <p class="text-sm font-bold text-on-surface leading-tight">
-                                    Identitas Terverifikasi
-                                </p>
-                                <p class="text-xs text-slate-500 mt-1">
-                                    KYC Mitra institusional "Nasi Padang Keluarga" telah selesai.
-                                </p>
-                                <p class="text-[10px] text-slate-400 mt-2 font-semibold">
-                                    1 JAM LALU
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Upcoming Payments -->
-                <div class="bg-surface-container-lowest rounded-xl p-6 shadow-[0px_4px_20px_rgba(0,0,0,0.02)]">
-                    <h4 class="text-sm font-bold font-headline mb-4 uppercase tracking-widest text-slate-400">
-                        Tagihan Mendatang
-                    </h4>
-                    <div class="space-y-4">
-                        <div class="flex justify-between items-center">
-                            <div>
-                                <p class="text-xs font-semibold text-slate-400">
-                                    Pembayaran Vendor
-                                </p>
-                                <p class="text-sm font-bold text-on-surface">
-                                    Berlangganan Spotify
-                                </p>
-                            </div>
-                            <span class="text-sm font-bold text-primary">Rp27,500</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <div>
-                                <p class="text-xs font-semibold text-slate-400">
-                                    Alokasi Pajak
-                                </p>
-                                <p class="text-sm font-bold text-on-surface">
-                                    Pajak Perusahaan
-                                </p>
-                            </div>
-                            <span class="text-sm font-bold text-primary">Rp450,000</span>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
