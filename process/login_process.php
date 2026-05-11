@@ -14,22 +14,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $result = mysqli_stmt_get_result($stmt);
     $user = mysqli_fetch_assoc($result);
 
-    if ($user && password_verify($password, $user['password'])) {
+    if (!$user) {
 
-        session_regenerate_id(true);
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['name'] = $user['name'];
-        $_SESSION['email'] = $user['email'];
-        $_SESSION['profile_photo'] = $user['profile_photo'] ?? '';
-        $_SESSION['show_splash'] = true;
-
-        header("Location: ../index.php");
+        header("Location: ../login.php?error=Email belum terdaftar");
         exit;
 
-    } else {
-        header("Location: ../login.php?error=1");
-        exit;
     }
+
+    if (!password_verify($password, $user['password'])) {
+
+        header("Location: ../login.php?error=Password salah");
+        exit;
+
+    }
+
+    session_regenerate_id(true);
+    $_SESSION['user_id'] = $user['id'];
+    $_SESSION['name'] = $user['name'];
+    $_SESSION['email'] = $user['email'];
+    $_SESSION['profile_photo'] = $user['profile_photo'] ?? '';
+    $_SESSION['show_splash'] = true;
+
+    header("Location: ../index.php");
+    exit;
 
 } else {
     header("Location: ../login.php");
