@@ -128,7 +128,7 @@
                                 : 0;
                         @endphp
 
-                        <a href="{{ route('notifications.index') }}"
+                        <button id="notificationTrigger" data-notification-trigger
                             class="relative w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center hover:bg-slate-100">
                             <span class="material-symbols-outlined text-slate-600">
                                 notifications
@@ -140,7 +140,7 @@
                                     {{ $notificationCount > 9 ? '9+' : $notificationCount }}
                                 </span>
                             @endif
-                        </a>
+                        </button>
 
                         <details class="relative">
                             <summary
@@ -220,6 +220,9 @@
             </div>
         </main>
     </div>
+
+    {{-- Notification Overlay --}}
+    @include('components.notification-overlay')
 </body>
 
 </html>
