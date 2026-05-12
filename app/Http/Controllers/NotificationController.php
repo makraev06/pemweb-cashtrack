@@ -15,6 +15,15 @@ class NotificationController extends Controller
         return view('notifications', compact('notifications'));
     }
 
+    public function api()
+    {
+        $notifications = $this->generateNotifications();
+
+        return response()->json([
+            'notifications' => $notifications,
+        ]);
+    }
+
     public static function generateNotifications(): array
     {
         $userId = auth()->id();
